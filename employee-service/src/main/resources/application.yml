@@ -1,1 +1,9 @@
-
+spring:
+  application:
+    name: employee-service
+  datasource:
+    url: jdbc:postgresql://${PG_HOST:localhost}:5432/
+    username: ${PG_USERNAME:postgres}
+    platform: POSTGRESQL
+    driver-class-name: org.postgresql.Driver
+    jpa.properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect

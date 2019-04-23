@@ -7,9 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @Builder
-public class DepartmentDTO {
-
-    private final String id;
+public class DepartmentVO {
 
     @NotBlank
     private final String name;

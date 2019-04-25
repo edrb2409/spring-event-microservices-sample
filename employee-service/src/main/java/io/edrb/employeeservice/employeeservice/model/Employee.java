@@ -33,7 +33,7 @@ public class Employee {
 
     @NotNull
     @Temporal(TemporalType.DATE)
-    private LocalDate birthday;
+    private Date birthday;
 
     @ManyToOne
     @JoinColumn(name = "departmentId", insertable = false, updatable = false, nullable = false)

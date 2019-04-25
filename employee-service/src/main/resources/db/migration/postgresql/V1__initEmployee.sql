@@ -2,8 +2,9 @@ DROP TABLE IF EXISTS employees;
 DROP TABLE IF EXISTS departments;
 
 CREATE TABLE departments (
-    id integer  NOT NULL,
+    id serial  NOT NULL,
     name VARCHAR(100)  NOT NULL,
+    UNIQUE (name),
     primary key (id)
 );
 
@@ -13,6 +14,7 @@ CREATE TABLE employees (
     fullname VARCHAR(200) NOT NULL,
     birthday date NOT NULL,
     departmentId integer NOT NULL,
+    UNIQUE (email),
     PRIMARY KEY (id)
 );
 

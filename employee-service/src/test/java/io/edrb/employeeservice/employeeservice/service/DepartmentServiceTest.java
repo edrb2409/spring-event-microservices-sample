@@ -1,6 +1,6 @@
 package io.edrb.employeeservice.employeeservice.service;
 
-import io.edrb.employeeservice.employeeservice.exception.NoUniqueDepartment;
+import io.edrb.employeeservice.employeeservice.exception.NoUniqueDepartmentException;
 import io.edrb.employeeservice.employeeservice.model.Department;
 import io.edrb.employeeservice.employeeservice.repository.DepartmentRepository;
 import org.junit.jupiter.api.Assertions;
@@ -37,7 +37,7 @@ public class DepartmentServiceTest {
 
         when(repository.save(it)).thenThrow(DataIntegrityViolationException.class);
 
-        Assertions.assertThrows(NoUniqueDepartment.class,
+        Assertions.assertThrows(NoUniqueDepartmentException.class,
                 () -> departmentService.create(it));
     }
 

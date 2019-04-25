@@ -8,6 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -32,7 +33,7 @@ public class Employee {
 
     @NotNull
     @Temporal(TemporalType.DATE)
-    private Date birthday;
+    private LocalDate birthday;
 
     @ManyToOne
     @JoinColumn(name = "departmentId", insertable = false, updatable = false, nullable = false)

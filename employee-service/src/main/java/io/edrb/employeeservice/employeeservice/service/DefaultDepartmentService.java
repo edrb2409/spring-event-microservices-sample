@@ -1,6 +1,6 @@
 package io.edrb.employeeservice.employeeservice.service;
 
-import io.edrb.employeeservice.employeeservice.exception.NoUniqueDepartment;
+import io.edrb.employeeservice.employeeservice.exception.NoUniqueDepartmentException;
 import io.edrb.employeeservice.employeeservice.model.Department;
 import io.edrb.employeeservice.employeeservice.repository.DepartmentRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class DefaultDepartmentService implements DepartmentService {
             return repository.save(department);
         } catch (DataIntegrityViolationException ex) {
             log.error("Exception: {}", ex.getMessage(), ex);
-            throw new NoUniqueDepartment();
+            throw new NoUniqueDepartmentException();
         }
     }
 }

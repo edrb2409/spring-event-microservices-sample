@@ -1,9 +1,11 @@
 package io.edrb.employeeservice.employeeservice.service;
 
+import io.edrb.employeeservice.employeeservice.exception.DepartmentNotFoundException;
 import io.edrb.employeeservice.employeeservice.exception.EmployeeNotFoundException;
-import io.edrb.employeeservice.employeeservice.exception.NoUniqueDepartmentException;
 import io.edrb.employeeservice.employeeservice.exception.NotUniqueEmailException;
+import io.edrb.employeeservice.employeeservice.model.Department;
 import io.edrb.employeeservice.employeeservice.model.Employee;
+import io.edrb.employeeservice.employeeservice.repository.DepartmentRepository;
 import io.edrb.employeeservice.employeeservice.repository.EmployeeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -15,13 +17,21 @@ public class DefaultEmployeeService implements EmployeeService {
 
     private final EmployeeRepository repository;
 
-    public DefaultEmployeeService(EmployeeRepository repository) {
+    private final DepartmentRepository departmentRepository;
+
+    public DefaultEmployeeService(EmployeeRepository repository,
+                                  DepartmentRepository departmentRepository) {
         this.repository = repository;
+        this.departmentRepository = departmentRepository;
     }
 
     @Override
     public Employee create(Employee employee) {
-        employee.setId(null);
+        Department department = getDepartment(employee.getDepartment().getName());
+
+        log.debug("department found: {}", department);
+
+        employee.setDepartment(department);
 
         return save(employee);
     }
@@ -29,6 +39,12 @@ public class DefaultEmployeeService implements EmployeeService {
     @Override
     public Employee update(String id, Employee employee) {
         findById(id);
+
+        Department department = getDepartment(employee.getDepartment().getName());
+
+        log.debug("department found: {}", department);
+
+        employee.setDepartment(department);
 
         employee.setId(id);
 
@@ -61,5 +77,10 @@ public class DefaultEmployeeService implements EmployeeService {
     private Employee findById(String id) {
         return repository.findById(id)
                 .orElseThrow(EmployeeNotFoundException::new);
+    }
+
+    private Department getDepartment(String name) {
+        return departmentRepository.findByName(name)
+                .orElseThrow(DepartmentNotFoundException::new);
     }
 }

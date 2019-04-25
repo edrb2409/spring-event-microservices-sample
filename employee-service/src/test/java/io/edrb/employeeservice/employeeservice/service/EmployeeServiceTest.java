@@ -1,9 +1,11 @@
 package io.edrb.employeeservice.employeeservice.service;
 
+import io.edrb.employeeservice.employeeservice.exception.DepartmentNotFoundException;
 import io.edrb.employeeservice.employeeservice.exception.EmployeeNotFoundException;
 import io.edrb.employeeservice.employeeservice.exception.NotUniqueEmailException;
 import io.edrb.employeeservice.employeeservice.model.Department;
 import io.edrb.employeeservice.employeeservice.model.Employee;
+import io.edrb.employeeservice.employeeservice.repository.DepartmentRepository;
 import io.edrb.employeeservice.employeeservice.repository.EmployeeRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,14 +30,17 @@ public class EmployeeServiceTest {
 
     @Mock EmployeeRepository repository;
 
+    @Mock DepartmentRepository departmentRepository;
+
     @BeforeEach void init_() {
-        service = new DefaultEmployeeService(repository);
+        service = new DefaultEmployeeService(repository, departmentRepository);
     }
 
     @Test void shouldCreateNewEmployee() {
         String id = UUID.randomUUID().toString();
 
         when(repository.save(getEmployeeForCreating())).thenReturn(getEmployee(id));
+        when(departmentRepository.findByName("IT")).thenReturn(Optional.of(it()));
 
         Employee employeeCreated = service.create(getEmployeeForCreating());
 
@@ -44,8 +49,16 @@ public class EmployeeServiceTest {
 
     @Test void shouldRaiseAnExceptionWhenEmailIsNotUniqueOnCreation() {
         when(repository.save(getEmployeeForCreating())).thenThrow(NotUniqueEmailException.class);
+        when(departmentRepository.findByName("IT")).thenReturn(Optional.of(it()));
 
         Assertions.assertThrows(NotUniqueEmailException.class,
+                () -> service.create(getEmployeeForCreating()));
+    }
+
+    @Test void shouldRaiseAnExceptionWhenDepartmentIsNotFound() {
+        when(departmentRepository.findByName("IT")).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(DepartmentNotFoundException.class,
                 () -> service.create(getEmployeeForCreating()));
     }
 
@@ -53,6 +66,7 @@ public class EmployeeServiceTest {
         String id = UUID.randomUUID().toString();
 
         when(repository.findById(id)).thenReturn(Optional.of(getEmployee(id)));
+        when(departmentRepository.findByName("IT")).thenReturn(Optional.of(it()));
         when(repository.save(getEmployee(id))).thenReturn(getEmployee(id));
 
         Employee employeeCreated = service.update(id, getEmployee(id));
@@ -64,6 +78,7 @@ public class EmployeeServiceTest {
         String id = UUID.randomUUID().toString();
 
         when(repository.findById(id)).thenReturn(Optional.of(getEmployee(id)));
+        when(departmentRepository.findByName("IT")).thenReturn(Optional.of(it()));
         when(repository.save(getEmployee(id))).thenThrow(NotUniqueEmailException.class);
 
         Assertions.assertThrows(NotUniqueEmailException.class,
@@ -120,6 +135,13 @@ public class EmployeeServiceTest {
                 .email("me@some.com")
                 .fullname("me some")
                 .id(id)
+                .build();
+    }
+
+    private Department it() {
+        return Department.builder()
+                .id(1L)
+                .name("IT")
                 .build();
     }
 

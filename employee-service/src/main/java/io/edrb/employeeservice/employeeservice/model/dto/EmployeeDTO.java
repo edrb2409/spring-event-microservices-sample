@@ -1,7 +1,10 @@
 package io.edrb.employeeservice.employeeservice.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
@@ -12,22 +15,25 @@ import java.util.Date;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class EmployeeDTO {
 
-    private final String id;
+    private String id;
 
     @Email
     @NotBlank
-    private final String email;
+    private String email;
 
     @NotBlank
-    private final String fullName;
+    private String fullName;
 
     @Past
-    private final Date birthday;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date birthday;
 
 
-    private final @Valid DepartmentVO department;
+    private @Valid DepartmentVO department;
 
 
 }

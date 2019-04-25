@@ -13,10 +13,10 @@ CREATE TABLE employees (
     email VARCHAR(100) NOT NULL,
     fullname VARCHAR(200) NOT NULL,
     birthday date NOT NULL,
-    departmentId integer NOT NULL,
+    department_id integer NOT NULL,
     UNIQUE (email),
     PRIMARY KEY (id)
 );
 
-ALTER TABLE employees ADD FOREIGN KEY (departmentId)
+ALTER TABLE employees ADD FOREIGN KEY (department_id)
 REFERENCES departments(id);

@@ -1,5 +1,8 @@
 package io.edrb.employeeservice.employeeservice.service;
 
+import io.edrb.employeeservice.employeeservice.aspects.annotation.CreateEvent;
+import io.edrb.employeeservice.employeeservice.aspects.annotation.DeleteEvent;
+import io.edrb.employeeservice.employeeservice.aspects.annotation.UpdateEvent;
 import io.edrb.employeeservice.employeeservice.exception.DepartmentNotFoundException;
 import io.edrb.employeeservice.employeeservice.exception.EmployeeNotFoundException;
 import io.edrb.employeeservice.employeeservice.exception.NotUniqueEmailException;
@@ -25,6 +28,7 @@ public class DefaultEmployeeService implements EmployeeService {
         this.departmentRepository = departmentRepository;
     }
 
+    @CreateEvent
     @Override
     public Employee create(Employee employee) {
         Department department = getDepartment(employee.getDepartment().getName());
@@ -36,6 +40,7 @@ public class DefaultEmployeeService implements EmployeeService {
         return save(employee);
     }
 
+    @UpdateEvent
     @Override
     public Employee update(String id, Employee employee) {
         findById(id);
@@ -56,6 +61,7 @@ public class DefaultEmployeeService implements EmployeeService {
         return findById(id);
     }
 
+    @DeleteEvent
     @Override
     public Employee delete(String id) {
         Employee employee = findById(id);

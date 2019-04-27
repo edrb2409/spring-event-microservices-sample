@@ -16,6 +16,8 @@ public class Event implements Serializable {
 
     private String type;
 
+    private String employeeId;
+
     private LocalDateTime timestamp;
 
     private Object payload;

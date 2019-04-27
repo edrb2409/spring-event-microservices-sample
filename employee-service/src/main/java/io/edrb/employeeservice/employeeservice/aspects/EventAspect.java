@@ -30,11 +30,7 @@ public class EventAspect {
         log.debug("joinPoint {}:", joinPoint.toString());
         log.debug("saved Employee: {}", savedEmployee);
 
-        service.sendEvent(Event.builder()
-                .payload(savedEmployee)
-                .timestamp(LocalDateTime.now())
-                .type("create")
-                .build());
+        buildEvent(savedEmployee, "create");
     }
 
     @AfterReturning(
@@ -44,11 +40,7 @@ public class EventAspect {
         log.debug("joinPoint {}:", joinPoint.toString());
         log.debug("updated Employee: {}", savedEmployee);
 
-        service.sendEvent(Event.builder()
-                .payload(savedEmployee)
-                .timestamp(LocalDateTime.now())
-                .type("update")
-                .build());
+        buildEvent(savedEmployee, "update");
     }
 
     @AfterReturning(
@@ -58,10 +50,15 @@ public class EventAspect {
         log.debug("joinPoint {}:", joinPoint.toString());
         log.debug("updated Employee: {}", savedEmployee);
 
+        buildEvent(savedEmployee, "delete");
+    }
+
+    private void buildEvent(Employee employee, String action) {
         service.sendEvent(Event.builder()
-                .payload(savedEmployee)
+                .payload(employee)
+                .employeeId(employee.getId())
                 .timestamp(LocalDateTime.now())
-                .type("delete")
+                .type(action)
                 .build());
     }
 

@@ -5,6 +5,8 @@ import io.edrb.eventservice.repository.EventRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class DefaultEventService implements EventService {
@@ -18,5 +20,10 @@ public class DefaultEventService implements EventService {
     @Override
     public void save(Event event) {
         repository.save(event);
+    }
+
+    @Override
+    public List<Event> getEventsFor(String employeeId) {
+        return repository.findByEmployeeIdOrderByTimestampAsc(employeeId);
     }
 }

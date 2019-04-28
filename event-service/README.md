@@ -27,6 +27,10 @@ Create docker image (edrb/employee-service)
 ./gradlew build docker
 ```
 
+## Swagger page
+
+`http://localhost:8081/swagger-ui.html`
+
 ## Running the test cases
 
 Run the test cases execute
